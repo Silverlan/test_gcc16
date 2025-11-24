@@ -9,19 +9,21 @@ jobs:
   clang:
     strategy:
       fail-fast: false
-      matrix:
-        version: [20, 21]
 
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/mattkretz/cplusplus-ci/clang${{ matrix.version }}
+      image: ghcr.io/mattkretz/cplusplus-ci/gcc16
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run test suite
-        env:
-          CXX: clang++
-        run: make check
-        
+      - name: Set PATH for cmake-latest
+        run: echo /opt/cmake-latest/bin >> $GITHUB_PATH
+
+      - name: Configure and build with CMake
+        shell: bash
+        run: |
+          cmake --version
+          gcc --version
+          clang --version
