@@ -1,0 +1,27 @@
+name: Clang
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  clang:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [20, 21]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/mattkretz/cplusplus-ci/clang${{ matrix.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run test suite
+        env:
+          CXX: clang++
+        run: make check
+        
